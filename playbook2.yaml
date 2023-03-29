@@ -1,0 +1,41 @@
+---
+- name : install apache web server
+  hosts : centos_servers
+  become : yes
+
+  vars:
+   source_files: /mnt/hgfs/photogallery_list-master/.
+   destination: /var/www/html
+
+  tasks:
+  - name: Install Apache
+    yum: name=httpd state=latest
+
+  - name: Copy project
+    copy: src={{source_files}} dest={{destination}} mode=0555
+    notify: Restart Apache
+
+  - name: Start Apache and enable
+    service: name=httpd state=started enabled=yes
+  
+  handlers:
+  - name: Restart Apache
+    service: name=httpd state=restarted
+
+- name: Install Default Apache on Ububntu
+  hosts: ubuntu_servers
+  become: yes
+
+  vars: 
+   source_files: /mnt/hgfs/photogallery_list-master/.
+   destination:	/var/www/html
+
+  tasks:
+  - name: install apache webserver
+    apt: name=apache2 state=latest
+
+  - name: copy project 
+    copy: src={{source_files}} dest={{destination}} mode=0555
+
+  - name: start apache
+    service: name=apache2 state=started enabled=yes

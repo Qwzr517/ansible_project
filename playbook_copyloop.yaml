@@ -1,0 +1,60 @@
+---
+- name : install apache web server
+  hosts : all
+  become : yes
+
+  vars:
+   source_files: /mnt/hgfs/photogallery_list-master/
+   destination: /var/www/html
+   debian: ansible_os_family == "Debian"
+   redhat: ansible_os_family == "RedHat"
+
+  tasks:
+  - name: Check OS family
+    debug:
+      var: ansible_os_family
+
+  - block: #====REDHAT BLOCK====
+
+      - name: Install Apache for RedHat
+        yum: name=httpd state=latest
+
+      - name: Start Apache and enable for RedHat
+        service: name=httpd state=started enabled=yes
+  
+    when: redhat
+
+  - block: #============DEBIAN===========
+   
+      - name: install apache for deb
+        apt: name=apache2 state=latest
+
+      - name: start webserver and enable for deb
+        service: name=apache2 state=started enabled=yes
+   
+    when: debian
+
+
+  - name: Copy project
+    copy: src={{ source_files }}/{{ item }} dest={{ destination }} mode=0555
+    loop:
+      - "index.html"
+      - "index.php"
+      - "main.js"
+   #copy: src={{item}} dest={{ destination }} mode=0555 === ANOTHER WAY TO COPY===
+   #with_fileglob: "{{source_files}}/*.*"
+    notify: 
+      - Restart Apache RedHat
+      - Restart Apache Debian
+
+
+
+  handlers:
+  - name: Restart Apache RedHat
+    service: name=httpd state=restarted
+    when: redhat
+
+  - name: Restart Apache Debian
+    service: name=apache2 state=restarted
+    when: debian 
+

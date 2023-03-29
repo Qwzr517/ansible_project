@@ -1,0 +1,37 @@
+---
+- name: variables lesson playbook
+  hosts: all
+  become: yes
+
+  vars:
+    message1: Hello
+    message2: World
+    secret_var: IDDQD
+
+  tasks:
+
+  - name: Print secret variable
+    debug:
+      var: secret_var
+  
+  - debug:
+      msg: "Secret message {{message1}}" 
+  
+  - set_fact: full_msg="{{ansible_distribution}} {{ansible_all_ipv4_addresses}}"
+  
+  - debug:
+      var: full_msg
+
+  - debug:
+      var: ansible_distribution 
+      var: ansible_all_ipv4_addresses
+
+  - name: Get Avg Load
+    shell: uptime
+    register: results
+
+  - debug:
+      var: results
+  
+  - debug:
+      var: results.stdout
