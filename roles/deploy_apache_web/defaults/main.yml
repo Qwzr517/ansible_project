@@ -1,0 +1,6 @@
+---
+# defaults file for deploy_apache_web
+source_files: /mnt/hgfs/photogallery_list-master/
+destination: /var/www/html
+debian: ansible_os_family == "Debian"
+redhat: ansible_os_family == "RedHat"

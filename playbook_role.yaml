@@ -1,0 +1,9 @@
+---
+- name: Role Test
+  hosts: all
+  become: yes
+
+  roles:
+    - {role: deploy_apache_web, when: ansible_system=='Linux'}
+#  roles:
+#  - deploy_apache_web
