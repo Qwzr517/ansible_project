@@ -1,0 +1,13 @@
+---
+- name: Create 1st folder
+  file:
+    path: /home/folder1
+    state: directory
+    mode: 0755
+
+- name: Create 2st folder
+  file:
+    path: /home/folder2
+    state: directory
+    mode: 0755
+

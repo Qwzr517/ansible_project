@@ -1,0 +1,17 @@
+---
+- name: Include Test
+  hosts: all
+  become: yes
+
+  vars:
+    mytext: "hello include"
+
+  tasks:
+  - name: ping?!
+    ping:
+
+  - name: use Include to create folders
+    include: create_folders.yaml
+
+  - name: create files with include
+    include: create_files.yaml 
