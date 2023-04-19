@@ -1,0 +1,39 @@
+---
+- name: Include Test
+  hosts: all
+  become: yes
+
+  vars:
+    my_message: "hello include"
+
+  tasks:
+   - name: ping?!
+     ping:
+
+   - name: Create 1st folder
+     file:
+      path: /home/folder1
+      state: directory
+      mode: 0755
+
+   - name: Create 2st folder
+     file:
+      path: /home/folder2
+      state: directory
+      mode: 0755
+
+   - name: Create 1st file
+     copy:
+        dest: /home/folder1/file1.txt
+        content: |
+         TextLine1, in file1
+         TextLine2, in file1
+         TextLine3, {{ mytext }}
+
+    - name: Create 2st file
+      copy:
+	      dest: /home/folder1/file2.txt
+        content: |
+          TextLine1, in file2
+          TextLine2, in file2
+          TextLine3, {{ mytext }}
